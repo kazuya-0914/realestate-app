@@ -1,0 +1,168 @@
+.card {
+  max-width: 360px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card h1 {
+  margin: 0 0 20px;
+  font-size: 22px;
+  color: #1f2937;
+  text-align: center;
+}
+
+/* --- 認証フォーム（ログイン・会員登録） --- */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #52514e;
+}
+
+.form-input {
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  color: #1f2937;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.form-error {
+  margin: 0;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.form-info {
+  margin: 0;
+  font-size: 13px;
+  color: #1d4ed8;
+}
+
+.form-footer {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.form-footer a {
+  color: #2563eb;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+/* --- ボタン --- */
+
+.btn {
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #2563eb;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+}
+
+.btn:disabled {
+  background: #93c5fd;
+  cursor: default;
+}
+
+.btn-outline {
+  color: #2563eb;
+  background: #ffffff;
+  border: 2px solid #2563eb;
+}
+
+.btn-outline:hover {
+  background: #eff6ff;
+}
+
+/* --- 物件一覧 --- */
+
+.properties-card {
+  max-width: 720px;
+}
+
+.properties-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.properties-header h1 {
+  margin: 0;
+  text-align: left;
+}
+
+.logged-in-as {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.property-card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.property-name {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.property-rent {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.property-area {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.status-message {
+  text-align: center;
+  color: #ffffff;
+  font-size: 15px;
+}

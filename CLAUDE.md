@@ -4,17 +4,54 @@
 
 ## プロジェクト概要
 
-**realestate-app** は、不動産物件の検索・一覧表示を行うWebアプリです。物件情報の検索・一覧表示・詳細表示などを想定しています。
+**realestate-app** は、Supabase認証機能付きの不動産管理Webアプリです。メールアドレス＋パスワードでの会員登録・ログインを行い、ログイン後に物件一覧（現状はダミーデータ）を表示します。
 
 ## 技術スタック
 
-未定。実装を始める際に相談しながら決定し、決まり次第このセクションに追記する。
+- React 19 + Vite
+- react-router-dom（ルーティング・認証によるアクセス制御）
+- Supabase（`@supabase/supabase-js`。メール＋パスワード認証）
+- oxlint（Lint）
+
+## ファイル構成
+
+- `src/lib/supabaseClient.js` — Supabaseクライアントの初期化
+- `src/contexts/authContextObject.js` — 認証情報のReact Context本体
+- `src/contexts/AuthContext.jsx` — `AuthProvider`。セッション取得・監視、`signUp`/`signIn`/`signOut`を提供
+- `src/contexts/useAuth.js` — Contextを利用するためのフック（Fast Refreshのため`AuthContext.jsx`とは別ファイルに分離）
+- `src/components/ProtectedRoute.jsx` — 未ログイン時に`/login`へリダイレクトするラッパー
+- `src/components/PropertyCard.jsx` — 物件カード（物件名・家賃・エリア）
+- `src/pages/LoginPage.jsx` — ログイン画面
+- `src/pages/SignupPage.jsx` — 会員登録画面（メール確認が必要な場合はその旨を表示）
+- `src/pages/PropertiesPage.jsx` — 物件一覧画面（ログアウトボタンあり）
+- `src/data/dummyProperties.js` — 物件一覧のダミーデータ
+- `src/App.jsx` — ルーティング定義（`/login`, `/signup`, `/properties`）
+
+## 認証まわりの設計
+
+- ルート（`/`）と未定義パスはすべて`/properties`へ転送し、`ProtectedRoute`が未ログインなら`/login`へリダイレクトする
+- 会員登録直後、Supabase側でメール確認が有効な場合は`session`が返らないため、その場合は登録完了ではなく「確認メールを送信した」旨を表示する（`AuthContext`の`signUp`が`needsEmailConfirmation`を返す）
+- 認可（誰がどの物件を見られるか等）はSupabase側のRow Level Securityで行う想定。現状はダミーデータのみで、Supabaseのテーブルとは未連携
+
+## APIキーの管理
+
+- `VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` は `.env` で管理し、`.gitignore`で除外している
+- Publishable key（旧anon key相当）はSupabaseの設計上ブラウザに埋め込まれることを前提とした公開キーであり、`VITE_`接頭辞でビルド時にクライアントバンドルへ含まれる。これはSupabaseの想定通りの使い方であり、他プロジェクト（weather-app・kakeibo-app）のような秘密鍵をサーバー経由にする対応は不要
+- Service role keyなど本当に秘匿すべきキーは、今後もこのプロジェクトでは使用しないこと（使う場合はサーバー経由に切り替える）
+
+## 動作確認方法
+
+```
+npm install
+cp .env.example .env   # VITE_SUPABASE_URL・VITE_SUPABASE_PUBLISHABLE_KEYを設定
+npm run dev
+```
 
 ## 開発方針
 
-- コードは可読性を優先し、過度な抽象化は避ける
-- 日本語話者向けのアプリのため、UI文言・コメント（必要な場合）は日本語を基本とする
-- ファイル構成・命名規約は技術スタックが決まり次第このファイルに追記する
+- コンポーネント単位で責務を分割し、可読性を優先する。過度な抽象化は避ける
+- 日本語話者向けのアプリのため、UI文言・コメントは日本語を基本とする
+- コンポーネントファイル・関数名は`PascalCase`、イベントハンドラは`handle + 動詞 + 対象`の`camelCase`、CSSクラス名は`kebab-case`（task-board・kakeibo-appと同じ規約）
 
 ## GitHubリポジトリ
 
@@ -24,6 +61,7 @@ https://github.com/kazuya-0914/realestate-app
 
 - コードを変更したら、その都度コミットしてGitHubリポジトリ（origin/main）にプッシュすること
 - 変更内容が分かるコミットメッセージを日本語で付けること
+- `.env`は絶対にコミットしないこと（コミット前に`git status`で混入していないか確認する）
 
 ## 応答言語
 
