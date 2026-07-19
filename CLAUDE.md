@@ -75,6 +75,12 @@ npm run dev
 
 https://github.com/kazuya-0914/realestate-app
 
+## デプロイ（Vercel）
+
+- `vercel.json` で全パスを `/index.html` にリライトしている（react-router-domによるクライアントサイドルーティングのため、`/login`などへの直接アクセス・リロードでも404にならないようにする設定）
+- 環境変数（`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`）は`vercel.json`に含めず、Vercelダッシュボードの Project Settings > Environment Variables で設定する
+- ビルドコマンド・出力ディレクトリはVercelのVite自動検出に任せており、`vercel.json`では指定していない
+
 ## Git運用ルール
 
 - コードを変更したら、その都度コミットしてGitHubリポジトリ（origin/main）にプッシュすること
