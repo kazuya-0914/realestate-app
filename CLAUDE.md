@@ -75,6 +75,11 @@ npm run dev
 
 https://github.com/kazuya-0914/realestate-app
 
+## デプロイ情報
+
+- 本番URL：https://realestate-app-blue.vercel.app/
+- Supabaseプロジェクト名：realestate-app
+
 ## デプロイ（Vercel）
 
 - `vercel.json` で全パスを `/index.html` にリライトしている（react-router-domによるクライアントサイドルーティングのため、`/login`などへの直接アクセス・リロードでも404にならないようにする設定）
