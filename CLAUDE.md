@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-**realestate-app** は、Supabase認証機能付きの不動産管理Webアプリです。メールアドレス＋パスワードでの会員登録・ログインを行い、ログイン後に物件一覧（現状はダミーデータ）を表示します。
+**realestate-app** は、Supabase認証機能付きの不動産管理Webアプリです。メールアドレス＋パスワードでの会員登録・ログインを行い、ログイン後に自分が登録した物件の一覧表示・新規登録・編集・削除（CRUD）ができます。
 
 ## 技術スタック
 
@@ -20,18 +20,36 @@
 - `src/contexts/AuthContext.jsx` — `AuthProvider`。セッション取得・監視、`signUp`/`signIn`/`signOut`を提供
 - `src/contexts/useAuth.js` — Contextを利用するためのフック（Fast Refreshのため`AuthContext.jsx`とは別ファイルに分離）
 - `src/components/ProtectedRoute.jsx` — 未ログイン時に`/login`へリダイレクトするラッパー
-- `src/components/PropertyCard.jsx` — 物件カード（物件名・家賃・エリア）
+- `src/components/PropertyCard.jsx` — 物件カード（物件名・家賃・エリア・間取り、編集/削除ボタン）
+- `src/components/PropertyForm.jsx` — 物件の新規登録・編集で共用するフォーム
+- `src/lib/propertiesApi.js` — `properties`テーブルへのCRUD操作（fetch/create/update/delete）
 - `src/pages/LoginPage.jsx` — ログイン画面
 - `src/pages/SignupPage.jsx` — 会員登録画面（メール確認が必要な場合はその旨を表示）
-- `src/pages/PropertiesPage.jsx` — 物件一覧画面（ログアウトボタンあり）
-- `src/data/dummyProperties.js` — 物件一覧のダミーデータ
+- `src/pages/PropertiesPage.jsx` — 物件一覧画面。一覧取得・新規登録・編集・削除・ログアウトを統括
 - `src/App.jsx` — ルーティング定義（`/login`, `/signup`, `/properties`）
+- `supabase/migrations/0001_create_properties.sql` — `properties`テーブルとRLSポリシーのSQL（Supabase CLI未導入のため、SupabaseダッシュボードのSQL Editorで手動実行する）
 
 ## 認証まわりの設計
 
 - ルート（`/`）と未定義パスはすべて`/properties`へ転送し、`ProtectedRoute`が未ログインなら`/login`へリダイレクトする
 - 会員登録直後、Supabase側でメール確認が有効な場合は`session`が返らないため、その場合は登録完了ではなく「確認メールを送信した」旨を表示する（`AuthContext`の`signUp`が`needsEmailConfirmation`を返す）
-- 認可（誰がどの物件を見られるか等）はSupabase側のRow Level Securityで行う想定。現状はダミーデータのみで、Supabaseのテーブルとは未連携
+- 認可（誰がどの物件を見られるか等）はSupabase側のRow Level Securityで行う。`properties`テーブルは`user_id = auth.uid()`の行のみSELECT/INSERT/UPDATE/DELETEできるポリシーを設定済み（`supabase/migrations/0001_create_properties.sql`）
+- `propertiesApi.js`側では`user_id`で明示的に絞り込んでいないが、RLSにより自分の行以外は返らない・操作できない
+
+## データベース（properties テーブル）
+
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | uuid | 主キー（自動生成） |
+| user_id | uuid | 登録したユーザー（`auth.users.id`への外部キー） |
+| name | text | 物件名 |
+| rent | integer | 家賃（円） |
+| area | text | エリア名 |
+| layout | text | 間取り（例: 1LDK） |
+| created_at | timestamptz | 作成日時 |
+
+- 初回セットアップ時は `supabase/migrations/0001_create_properties.sql` の内容をSupabaseダッシュボードのSQL Editorに貼り付けて実行する
+- テーブル定義・RLSポリシーを変更する場合は、このディレクトリに連番で新しいマイグレーションファイルを追加すること（既存ファイルは変更しない）
 
 ## APIキーの管理
 

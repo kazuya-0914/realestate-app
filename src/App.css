@@ -156,13 +156,60 @@
 }
 
 .property-area {
-  margin: 0;
+  margin: 0 0 10px;
   font-size: 13px;
   color: #6b7280;
+}
+
+.property-card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.link-btn {
+  padding: 0;
+  font-size: 13px;
+  font-weight: bold;
+  color: #2563eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+.link-btn-danger {
+  color: #dc2626;
+}
+
+/* --- 物件登録・編集フォーム --- */
+
+.property-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.property-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .status-message {
   text-align: center;
   color: #ffffff;
   font-size: 15px;
+}
+
+.status-message-dark {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
 }
